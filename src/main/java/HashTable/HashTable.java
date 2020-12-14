@@ -271,7 +271,7 @@ public class HashTable<K,V> implements Map<Object, V> {
 
     @Override
     public Collection<V> values() {
-        if (values==null)
+        if (values == null)
             values = Collections.synchronizedCollection(new ValueCollection());
         return values;
     }
@@ -293,7 +293,7 @@ public class HashTable<K,V> implements Map<Object, V> {
 
     @Override
     public Set<Map.Entry<Object, V>> entrySet() {
-        if (entrySet==null)
+        if (entrySet == null)
             entrySet = Collections.synchronizedSet(new HashTable.EntrySet());
         return entrySet;
     }

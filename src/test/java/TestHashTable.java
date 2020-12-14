@@ -138,7 +138,7 @@ public class TestHashTable {
     void valuesTest() {
         HashTable<Integer, Integer> currentTable = new HashTable<Integer, Integer>();
         Hashtable<Integer, Integer> expected = new Hashtable();
-        for (int i = 1; i <= 3; i++) {
+        for (int i = 1; i <= 8; i++) {
             currentTable.put(i, i * i);
             expected.put(i, i * i);
         }
@@ -148,7 +148,7 @@ public class TestHashTable {
     @Test
     void entrySet() {
         HashTable<Integer, Integer> currentTable = new HashTable<Integer, Integer>();
-        Hashtable<Integer, Integer> expected = new Hashtable();
+        Hashtable expected = new Hashtable();
         for (int i = 1; i <= 3; i++) {
             currentTable.put(i, i * 10 + i);
             expected.put(i, i * 10 + i);
