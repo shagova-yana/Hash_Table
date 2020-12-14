@@ -5,7 +5,7 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-public class HashTable<K,V> implements Map<Object, V> {
+public class HashTable<K,V> implements Map<K, V> {
 
     private final int TABLE_SIZE;
     private static final int MAX_ARRAY_SIZE = Integer.MAX_VALUE - 8;
@@ -126,7 +126,7 @@ public class HashTable<K,V> implements Map<Object, V> {
     }
 
     @Override
-    public V put(Object key, V value) {
+    public V put(K key, V value) {
         if (value == null) {
             throw new NullPointerException();
         }
@@ -226,8 +226,8 @@ public class HashTable<K,V> implements Map<Object, V> {
     }
 
     @Override
-    public void putAll(Map<?, ? extends V> m) {
-        for (Map.Entry<?, ? extends V> e : m.entrySet())
+    public void putAll(Map<? extends K, ? extends V> m) {
+        for (Map.Entry<?  extends K, ? extends V> e : m.entrySet())
             put(e.getKey(), e.getValue());
     }
 
@@ -241,11 +241,11 @@ public class HashTable<K,V> implements Map<Object, V> {
     }
 
     private Set keySet;
-    private Set<Map.Entry<Object, V>> entrySet;
+    private Set<Map.Entry<K, V>> entrySet;
     private Collection<V> values;
 
     @Override
-    public Set<Object> keySet() {
+    public Set<K> keySet() {
         if (keySet == null)
             keySet = Collections.synchronizedSet(new KeySet());
         return keySet;
@@ -292,7 +292,7 @@ public class HashTable<K,V> implements Map<Object, V> {
     }
 
     @Override
-    public Set<Map.Entry<Object, V>> entrySet() {
+    public Set<Map.Entry<K, V>> entrySet() {
         if (entrySet == null)
             entrySet = Collections.synchronizedSet(new HashTable.EntrySet());
         return entrySet;
@@ -374,7 +374,7 @@ public class HashTable<K,V> implements Map<Object, V> {
     }
 
     @Override
-    public void forEach(BiConsumer<? super Object, ? super V> action) {
+    public void forEach(BiConsumer<? super K, ? super V> action) {
         Objects.requireNonNull(action);
         final int expectedCountMod = countMod;
 
@@ -392,7 +392,7 @@ public class HashTable<K,V> implements Map<Object, V> {
     }
 
     @Override
-    public void replaceAll(BiFunction<? super Object, ? super V, ? extends V> function) {
+    public void replaceAll(BiFunction<? super K, ? super V, ? extends V> function) {
         Objects.requireNonNull(function);
         final int expectedCountMod = countMod;
         Entry<K, V>[] tab = (Entry<K, V>[])table;
@@ -410,7 +410,7 @@ public class HashTable<K,V> implements Map<Object, V> {
     }
 
     @Override
-    public V putIfAbsent(Object key, V value) {
+    public V putIfAbsent(K key, V value) {
         Objects.requireNonNull(value);
 
         Entry<?, ?>[] tab = table;
@@ -470,7 +470,7 @@ public class HashTable<K,V> implements Map<Object, V> {
     }
 
     @Override
-    public boolean replace(Object key, V oldValue, V newValue) {
+    public boolean replace(K key, V oldValue, V newValue) {
         if (oldValue == null || newValue == null) return false;
         Entry<?, ?>[] tab = table;
         int hash = key.hashCode();
@@ -496,7 +496,7 @@ public class HashTable<K,V> implements Map<Object, V> {
     }
 
     @Override
-    public V replace(Object key, V value) {
+    public V replace(K key, V value) {
         Objects.requireNonNull(value);
         Entry<?, ?>[] tab = table;
         int hash = key.hashCode();
@@ -519,7 +519,7 @@ public class HashTable<K,V> implements Map<Object, V> {
     }
 
     @Override
-    public V computeIfAbsent(Object key, Function<? super Object, ? extends V> mappingFunction) {
+    public V computeIfAbsent(K key, Function<? super K, ? extends V> mappingFunction) {
         Objects.requireNonNull(mappingFunction);
 
         Entry<?, ?>[] tab = table;
@@ -549,7 +549,7 @@ public class HashTable<K,V> implements Map<Object, V> {
     }
 
     @Override
-    public V computeIfPresent(Object key, BiFunction<? super Object, ? super V, ? extends V> remappingFunction) {
+    public V computeIfPresent(K key, BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
         Objects.requireNonNull(remappingFunction);
 
         Entry<?, ?>[] tab = table;
@@ -589,7 +589,7 @@ public class HashTable<K,V> implements Map<Object, V> {
     }
 
     @Override
-    public V compute(Object key, BiFunction<? super Object, ? super V, ? extends V> remappingFunction) {
+    public V compute(K key, BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
         Objects.requireNonNull(remappingFunction);
 
         Entry<?, ?>[] tab = table;
@@ -637,7 +637,7 @@ public class HashTable<K,V> implements Map<Object, V> {
     }
 
     @Override
-    public V merge(Object key, V value, BiFunction<? super V, ? super V, ? extends V> remappingFunction) {
+    public V merge(K key, V value, BiFunction<? super V, ? super V, ? extends V> remappingFunction) {
         Objects.requireNonNull(remappingFunction);
 
         Entry<?,?> tab[] = table;
@@ -692,7 +692,7 @@ public class HashTable<K,V> implements Map<Object, V> {
             return false;
 
         try {
-            for (Map.Entry<Object, V> e : entrySet()) {
+            for (Map.Entry<K, V> e : entrySet()) {
                 Object key = e.getKey();
                 V value = e.getValue();
                 if (value == null) {
@@ -732,11 +732,11 @@ public class HashTable<K,V> implements Map<Object, V> {
             return "{}";
 
         StringBuilder sb = new StringBuilder();
-        Iterator<Map.Entry<Object, V>> it = entrySet().iterator();
+        Iterator<Map.Entry<K, V>> it = entrySet().iterator();
 
         sb.append('{');
         for (int i = 0; ; i++) {
-            Map.Entry<Object, V> e = it.next();
+            Map.Entry<K, V> e = it.next();
             Object key = e.getKey();
             V value = e.getValue();
             sb.append(key   == this ? "(this Map)" : key.toString());
